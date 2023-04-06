@@ -1,0 +1,127 @@
+using System;
+using System.Collections.Generic;
+
+namespace Inventario
+{
+    class Program
+    {
+        static Dictionary<string, int> inventario = new Dictionary<string, int>();
+
+        static void Main(string[] args)
+        {
+            while (true)
+            {
+                Console.WriteLine("Bem-vindo(a) ao seu inventário!");
+                Console.WriteLine("Escolha uma opção:");
+                Console.WriteLine("1 - Adicionar Item");
+                Console.WriteLine("2 - Mostrar Inventário");
+                Console.WriteLine("3 - Usar Item");
+                Console.WriteLine("4 - Sair");
+
+                string opcao = Console.ReadLine();
+
+                switch (opcao)
+                {
+                    case "1":
+                        AdicionarItem();
+                        break;
+                    case "2":
+                        MostrarInventario();
+                        break;
+                    case "3":
+                        UsarItem();
+                        break;
+                    case "4":
+                        Console.WriteLine("Até logo!");
+                        return;
+                    default:
+                        Console.WriteLine("Opção inválida!");
+                        break;
+                }
+            }
+        }
+
+        static void AdicionarItem()
+        {
+            Console.WriteLine("Digite o nome do item:");
+            string nome = Console.ReadLine();
+
+            Console.WriteLine("Digite a quantidade do item:");
+            int quantidade = int.Parse(Console.ReadLine());
+
+            if (inventario.ContainsKey(nome))
+            {
+                inventario[nome] += quantidade;
+            }
+            else
+            {
+                inventario[nome] = quantidade;
+            }
+
+            Console.WriteLine("Item adicionado ao inventário!");
+        }
+
+        static void MostrarInventario()
+        {
+            if (inventario.Count == 0)
+            {
+                Console.WriteLine("Inventário vazio!");
+                return;
+            }
+
+            Console.WriteLine("Inventário:");
+
+            foreach (KeyValuePair<string, int> item in inventario)
+            {
+                Console.WriteLine($"{item.Key} - Quantidade: {item.Value}");
+            }
+        }
+
+        static void UsarItem()
+        {
+            if (inventario.Count == 0)
+            {
+                Console.WriteLine("Inventário vazio!");
+                return;
+            }
+
+            Console.WriteLine("Digite o número do item a ser usado:");
+
+            int i = 1;
+            foreach (KeyValuePair<string, int> item in inventario)
+            {
+                Console.WriteLine($"{i} - {item.Key} - Quantidade: {item.Value}");
+                i++;
+            }
+
+            int numero = int.Parse(Console.ReadLine());
+
+            if (numero <= 0 || numero > inventario.Count)
+            {
+                Console.WriteLine("Número de item inválido!");
+                return;
+            }
+
+            string nomeItem = "";
+            int j = 1;
+            foreach (KeyValuePair<string, int> item in inventario)
+            {
+                if (j == numero)
+                {
+                    nomeItem = item.Key;
+                    break;
+                }
+                j++;
+            }
+
+            inventario[nomeItem]--;
+
+            if (inventario[nomeItem] == 0)
+            {
+                inventario.Remove(nomeItem);
+            }
+
+            Console.WriteLine("Item usado!");
+        }
+    }
+}
